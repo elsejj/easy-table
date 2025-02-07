@@ -7,7 +7,7 @@
     </div>
     <div class="flex-auto flex flex-col items-center justify-center overflow-auto h-full" @paste="onPasteImage">
       <div v-if="!imageBody">亦可在此按下Ctrl+V来粘贴图片</div>
-      <img v-else :src="imageBody" class="max-w-full h-full" />
+      <img v-else :src="imageBody" class="max-h-full max-w-full" />
     </div>
 
   </div>
