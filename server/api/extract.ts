@@ -23,6 +23,7 @@ the <table> tag should have the class 'easy-table', no other classes or attribut
       }
     ],
     stream: true,
+    stream_options: { include_usage: true }
   }
 }
 
@@ -49,6 +50,9 @@ function parseLlmChunk(chunk: Uint8Array): string {
     try {
       const chunk = JSON.parse(line.slice(5));
       const part = chunk.choices[0]?.delta?.content as string || ''
+      if (chunk.usage?.prompt_tokens) {
+        console.info('LLM usage:', JSON.stringify(chunk.usage))
+      }
       return part;
     } catch (e) {
       console.error('Failed to parse LLM response', e)

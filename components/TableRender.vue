@@ -8,7 +8,7 @@
         :disabled="!canExtract"></Button>
       <Button icon="pi pi-table" label="复制表格" raised @click="onCopyTable" :disabled="!canCopy"></Button>
     </div>
-    <div ref="extractedTable" class="w-full p-2 overflow-x-auto">
+    <div ref="extractedTable" class="w-full p-2 items-center justify-center flex">
     </div>
     <Toast position="top-center" />
   </div>

@@ -1,15 +1,13 @@
 <template>
-  <div class="w-full h-full flex flex-col gap-2 ">
+  <div class="w-full flex flex-col gap-2 md:min-h-[98vh] h-[50vh] ">
     <div class="w-full flex flex-row gap-2 items-center justify-center">
       <FileUpload class=" self-center" mode="basic" accept="image/*" @select="onSelectFile" chooseLabel="选择文件"
         chooseIcon="pi pi-folder-open" :chooseButtonProps="{ severity: 'secondary', raised: true }">
       </FileUpload>
     </div>
-    <div
-      class="flex-auto flex flex-col items-center justify-center border-1 border-dashed border-gray-300 rounded-lg overflow-auto"
-      @paste="onPasteImage">
+    <div class="flex-auto flex flex-col items-center justify-center overflow-auto h-full" @paste="onPasteImage">
       <div v-if="!imageBody">亦可在此按下Ctrl+V来粘贴图片</div>
-      <img v-else :src="imageBody" class="max-w-full max-h-full" />
+      <img v-else :src="imageBody" class="max-w-full h-full" />
     </div>
 
   </div>
