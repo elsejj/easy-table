@@ -16,8 +16,14 @@ function buildLlmRequest(image: string, llm: any): any {
           {
             type: "text",
             text:
-              `Please analyze these image and extract any tables as HTML tables. Handle line wraps in cells carefully, using '<br/>' when needed.
-the <table> tag should have the class 'easy-table', no other classes or attributes should be added to the table. 
+              `Please analyze this image and extract any tables as HTML tables. Handle line wraps in cells carefully, using '<br/>' when needed.
+You should try your best to keep the origin table structure, content, format, and alignment as much as possible. The key points are:
+ 
+- colspan and rowspan
+- bold, italic, underline, strikethrough
+- when the table has no white background color, it should set to the 'bgcolor' attribute of the 'table' 'tr' 'th' 'td' tag
+- table borders should be maintained using the 'border' attribute
+- 'table' tag should have the 'easy-table' class
 `,
           },
         ],
