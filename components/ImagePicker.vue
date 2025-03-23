@@ -68,10 +68,7 @@ async function compressImage(imageData: Blob): Promise<Blob> {
 
   const maxWidth = 1536
   const maxHeight = 1536
-  const ratio = Math.min(maxWidth / img.width, maxHeight / img.height)
-  if (ratio >= 1) {
-    return imageData
-  }
+  const ratio = Math.min(Math.min(maxWidth / img.width, maxHeight / img.height), 1)
 
   const canvas = new OffscreenCanvas(Math.round(img.width * ratio), Math.round(img.height * ratio))
   const ctx = canvas.getContext('2d')

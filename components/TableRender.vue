@@ -40,6 +40,34 @@ watch(props, (newProps) => {
 })
 
 
+function cssToString(css: CSSStyleDeclaration) {
+  const keptStyles = ['background-color', 'color', 'width']
+  const styles: string[] = []
+  for (const style of keptStyles) {
+    const value = css.getPropertyValue(style)
+    if (value) {
+      styles.push(`${style}: ${value}`)
+    }
+  }
+  return styles.join('; ')
+}
+
+
+function addComputedStyle(node: HTMLElement) {
+  const computedStyle = window.getComputedStyle(node)
+  const cloned = node.cloneNode(false) as HTMLElement
+  cloned.style.cssText = cssToString(computedStyle)
+  for (const child of node.childNodes) {
+    if (child.nodeType === Node.TEXT_NODE) {
+      const textNode = document.createTextNode((child as Text).textContent || '')
+      cloned.appendChild(textNode)
+    } else {
+      cloned.appendChild(addComputedStyle(child as HTMLElement))
+    }
+  }
+  return cloned
+}
+
 async function onCopyTable() {
 
   if (!extractedTable.value) return
@@ -51,7 +79,10 @@ async function onCopyTable() {
     return
   }
 
-  const html = extractedTable.value.innerHTML.replaceAll(/<br\/?>/g, '\n')
+  const table = addComputedStyle(extractedTable.value)
+
+
+  const html = table.innerHTML.replaceAll(/<br\/?>/g, '\n')
   await clipboard.write([
     new ClipboardItem({
       'text/html': new Blob([html], { type: 'text/html' }),
