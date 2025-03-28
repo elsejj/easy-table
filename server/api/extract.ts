@@ -120,6 +120,7 @@ async function checkQuota(traceId: string): Promise<boolean> {
     return false;
   }
   const quota = resp.quota?.quota || 0
+  console.info('Quota remaining:', quota)
   return quota > 0;
 }
 
@@ -131,13 +132,10 @@ export default defineEventHandler(async (event) => {
 
   console.info(logPrefix, 'extract start')
 
-  console.info(logPrefix, checkQuota)
   if (!await checkQuota(reqId)) {
     console.error(logPrefix, 'Quota exceeded')
     return new Response('Quota exceeded', { status: 403 })
   }
-
-
 
   const image = await readRawBody(event)
   if (!image) {
