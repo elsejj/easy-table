@@ -15,7 +15,12 @@ export default defineNuxtConfig({
 
 
   runtimeConfig: {
-    apiKey: 'hello',
+    usage: {
+      url: '',
+      token: '',
+      maxQuota: 2000,
+      encKey: '',
+    },
     llm: {
       baseURL: '',
       apiKey: '',
@@ -24,6 +29,14 @@ export default defineNuxtConfig({
     },
     public: {
 
+    }
+  },
+
+  typescript: {
+    "tsConfig": {
+      "compilerOptions": {
+        "target": "ESNext",
+      }
     }
   },
 
@@ -41,7 +54,16 @@ export default defineNuxtConfig({
   vite: {
     plugins: [
       tailwindcss()
-    ]
+    ],
+    optimizeDeps: {
+      esbuildOptions: {
+        target: 'esnext'
+      }
+    },
+    build: {
+      target: 'esnext',
+    },
+
   },
 
   primevue: {

@@ -1,4 +1,5 @@
 import { randomUUID } from 'node:crypto'
+import { makeKey, newAuthRequest, sendAuthRequest } from './authdb';
 
 function buildLlmRequest(image: string, llm: any): any {
   return {
@@ -107,10 +108,31 @@ function makeUUID() {
   return randomUUID()
 }
 
+async function checkQuota(traceId: string): Promise<boolean> {
+  const { usage } = useRuntimeConfig()
+
+  const req = newAuthRequest('use', { token: usage.token, maxQuota: usage.maxQuota }, traceId)
+  const encKey = await makeKey(usage.encKey)
+  const resp = await sendAuthRequest(req, encKey, usage.url)
+
+  if (!resp) {
+    console.error('Failed to check quota', resp, resp.status)
+    return false;
+  }
+  const quota = resp.quota?.quota || 0
+  return quota > 0;
+}
+
 export default defineEventHandler(async (event) => {
 
   const userIp = getRequestIP(event, { xForwardedFor: true })
   const reqId = getRequestHeader(event, 'x-request-id') || makeUUID()
+
+  if (!await checkQuota(reqId)) {
+    console.error('Quota exceeded')
+    return new Response('Quota exceeded', { status: 403 })
+  }
+
 
   const logPrefix = `[${reqId} ${userIp}]`
 
