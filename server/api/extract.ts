@@ -127,16 +127,17 @@ export default defineEventHandler(async (event) => {
 
   const userIp = getRequestIP(event, { xForwardedFor: true })
   const reqId = getRequestHeader(event, 'x-request-id') || makeUUID()
+  const logPrefix = `[${reqId} ${userIp}]`
 
+  console.info(logPrefix, 'extract start')
+
+  console.info(logPrefix, checkQuota)
   if (!await checkQuota(reqId)) {
-    console.error('Quota exceeded')
+    console.error(logPrefix, 'Quota exceeded')
     return new Response('Quota exceeded', { status: 403 })
   }
 
 
-  const logPrefix = `[${reqId} ${userIp}]`
-
-  console.info(logPrefix, 'extract start')
 
   const image = await readRawBody(event)
   if (!image) {

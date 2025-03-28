@@ -81,6 +81,7 @@ if (!globalThis.crypto) {
   import('crypto').then((crypto) => {
     //@ts-ignore
     globalThis.crypto = crypto.webcrypto;
+    console.log('Using Node.js crypto module');
   });
 }
 
